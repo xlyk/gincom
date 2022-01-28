@@ -116,16 +116,19 @@ func HttpServer(r *gin.Engine, o HttpServerOptions) *http.Server {
 	return &http.Server{
 		Addr:         fmt.Sprintf(":%d", o.Port),
 		ReadTimeout:  o.ReadTimeout,
+		ReadHeaderTimeout: o.ReadTimeout,
 		WriteTimeout: o.WriteTimeout,
+		IdleTimeout: o.ReadTimeout,
 		Handler:      r,
 	}
 }
 
 func NewHttpServer(r *gin.Engine) *http.Server {
+	timeout := 3 * time.Minute
 	opts := HttpServerOptions{
 		Port:         3141,
-		ReadTimeout:  60 * time.Second,
-		WriteTimeout: 60 * time.Second,
+		ReadTimeout:  timeout,
+		WriteTimeout: timeout,
 	}
 	return HttpServer(r, opts)
 }
